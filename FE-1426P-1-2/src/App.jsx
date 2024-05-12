@@ -58,33 +58,35 @@ const App = () => {
   }, [filterMarket, filterCategory, filterStatus, filterName, searchText]);
 
   const handleFilterChange = () => {
-    let filtered = products.filter((product) => {
-      const marketMatch =
-        !filterMarket || product.market.id === parseInt(filterMarket);
-      const categoryMatch =
-        !filterCategory || product.category.id === parseInt(filterCategory);
-      const nameMatch =
-        !filterName ||
-        product.name.toLowerCase().includes(filterName.toLowerCase());
-  
-      let statusMatch = true;
-      if (filterStatus) {
-        statusMatch =
-          filterStatus === "all"
-            ? true
-            : product.isBought === (filterStatus === "bought");
-      }
-  
-      return marketMatch && categoryMatch && statusMatch && nameMatch;
-    });
-  
-    const searcher = new FuzzySearch(filtered, ["name"], {
-      caseSensitive: false,
-    });
-    filtered = searchText ? searcher.search(searchText) : filtered;
-  
-    setFilteredProducts(filtered);
-  };
+  let filtered = products.filter((product) => {
+    const marketMatch =
+      !filterMarket || product.market.id === parseInt(filterMarket);
+    const categoryMatch =
+      !filterCategory ||
+      (!filterMarket && !product.category.id) || 
+      (filterMarket && product.category.id === parseInt(filterCategory)); 
+    const nameMatch =
+      !filterName ||
+      product.name.toLowerCase().includes(filterName.toLowerCase());
+
+    let statusMatch = true;
+    if (filterStatus) {
+      statusMatch =
+        filterStatus === "all"
+          ? true
+          : product.isBought === (filterStatus === "bought");
+    }
+
+    return marketMatch && categoryMatch && statusMatch && nameMatch;
+  });
+
+  const searcher = new FuzzySearch(filtered, ["name"], {
+    caseSensitive: false,
+  });
+  filtered = searchText ? searcher.search(searchText) : filtered;
+
+  setFilteredProducts(filtered);
+};
   const clearAllFilters = () => {
     setFilterMarket("");
     setFilterCategory("");

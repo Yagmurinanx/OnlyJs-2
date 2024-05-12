@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
+import deleteIcon from "../assets/trash-solid.svg"
 
 const ProductList = ({ products, handleProductClick, handleDeleteProduct }) => {
   return (
@@ -37,8 +38,9 @@ const ProductList = ({ products, handleProductClick, handleDeleteProduct }) => {
                       e.stopPropagation();
                       handleDeleteProduct(product.id);
                     }}
+                    
                   >
-                    Sil
+                    <img src={deleteIcon} alt="Sil" style={{ width: '16px', height: '16px' }} />
                   </Button>
                 </td>
               </tr>
